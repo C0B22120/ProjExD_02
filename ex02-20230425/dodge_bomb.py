@@ -5,9 +5,9 @@ import pygame as pg
 
 delta = {
         pg.K_UP:[0,-1],
-        pg.K_DOWN:[0,1],
+        pg.K_DOWN:[0,+1],
         pg.K_LEFT:[-1,0],
-        pg.K_RIGHT:[1,0] 
+        pg.K_RIGHT:[+1,0] 
          }  #移動用辞書
 def check_bound(scr_rct: pg.rect,obj_rct: pg.rect) -> tuple[bool,bool]: 
     """
@@ -30,7 +30,7 @@ def main():
     bg_img = pg.image.load("ex02-20230425/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02-20230425/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
-    kk_rct = kk_img.get_rect() 
+    kk_rct = kk_img.get_rect() #こうかとんのrect
     kk_imgs=[]
     for f in range (7):
         kt_img =pg.transform.rotozoom(kk_img,45*f,1.0)
@@ -47,7 +47,7 @@ def main():
     bb_rct=bb_img.get_rect()
     bb_rct.center = x , y
     tmr = 0
-    flag =0
+    
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -63,11 +63,7 @@ def main():
             for k,mv in delta.items():
                 if key_lst[k] :
                     kk_rct.move_ip(-mv[0],-mv[1])
-
         screen.blit(bg_img, [0, 0])
-        for k,mv in delta.items():
-            if key_lst[k]:
-                kk_rct.move_ip(mv)
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx,vy)
         yoko, tate = check_bound(screen.get_rect(),bb_rct)
@@ -75,12 +71,18 @@ def main():
             vx *= -1
         if not tate:
             vy *=  -1  #縦方向にはみ出ていたら
-        screen.blit(bb_img,bb_rct)  #表示
+        screen.blit(bb_img,bb_rct)  #爆弾の表示
+        fonto  = pg.font.Font(None, 100)
+        txt = fonto.render(str(tmr), True, (0, 0,0))
+        screen.blit(txt, [0, 0])
 
-        if kk_rct.colliderect(bb_rct):  #一定の時間の間止める
+        if kk_rct.colliderect(bb_rct):  
             kk_img = pg.image.load("ex02-20230425/fig/8.png")
             screen.blit(bg_img,[0,0])
+            txt = fonto.render(str(tmr), True, (0, 0,0))
+            screen.blit(txt, [0, 0])
             screen.blit(kk_img,[800,400])
+
             pg.display.update()
             pg.time.wait(5000)  #一定の時間の間止める
             return
