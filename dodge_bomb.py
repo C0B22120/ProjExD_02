@@ -32,12 +32,18 @@ def main():
     kk_img = pg.image.load("ex02-20230425/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect() 
+    kk_imgs=[]
+    for f in range (7):
+        kt_img =pg.transform.rotozoom(kk_img,45*f,1.0)
+        kk_imgs.append(kt_img)  #切り替えるこうかとんのリスト
+
     kk_rct.center = 900, 400
     bb_img = pg.Surface((20,20))  #bombの描画
     pg.draw.circle(bb_img,(255,0,0),(10,10),10)
     bb_img.set_colorkey((0,0,0))  #爆弾の透過
     x,y = random.randint(0,1600) , random.randint(0,900)  #ランダムな座標の指定
     #screen.blit(bb_img,[x,y])
+    
     vx,vy = +1 , +1
     bb_rct=bb_img.get_rect()
     bb_rct.center = x , y
@@ -53,12 +59,17 @@ def main():
         for k,mv in delta.items():
             if key_lst[k]:
                 kk_rct.move_ip(mv)
+
         if check_bound(screen.get_rect(),kk_rct) != (True,True):
             for k,mv in delta.items():
                 if key_lst[k]:
                     kk_rct.move_ip(-mv[0],-mv[1])
 
+
         screen.blit(bg_img, [0, 0])
+        for k,mv in delta.items():
+            if key_lst[k]:
+                kk_rct.move_ip(mv)
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx,vy)
         yoko, tate = check_bound(screen.get_rect(),bb_rct)
@@ -68,6 +79,11 @@ def main():
             vy *=  -1  #縦方向にはみ出ていたら
         screen.blit(bb_img,bb_rct)  #表示
         if kk_rct.colliderect(bb_rct):
+            ck_time=0
+            while ck_time < 5000:
+                kk_img = pg.image.load("ex02-20230425/fig/8.png")
+                screen.blit(kk_img,[800,400])
+                ck_time+=1
             return
 
         pg.display.update()
