@@ -64,8 +64,6 @@ def main():
             for k,mv in delta.items():
                 if key_lst[k] :
                     kk_rct.move_ip(-mv[0],-mv[1])
-        vx = tmr // 1000
-        vy = tmr // 1000
 
         screen.blit(bg_img, [0, 0])
         for k,mv in delta.items():
@@ -81,8 +79,11 @@ def main():
         screen.blit(bb_img,bb_rct)  #表示
 
         if kk_rct.colliderect(bb_rct):
-            kk_img = pg.image.load("ex02-20230425/fig/8.png")
-            screen.blit(kk_img,[800,400])
+            ck_time=0
+            while ck_time < 5000:
+                kk_img = pg.image.load("ex02-20230425/fig/8.png")
+                screen.blit(kk_img,[800,400])
+                ck_time+=1           
             return
 
         pg.display.update()
