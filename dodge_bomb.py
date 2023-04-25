@@ -48,7 +48,7 @@ def main():
     bb_rct=bb_img.get_rect()
     bb_rct.center = x , y
     tmr = 0
-
+    flag =0
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -62,7 +62,7 @@ def main():
 
         if check_bound(screen.get_rect(),kk_rct) != (True,True):
             for k,mv in delta.items():
-                if key_lst[k]:
+                if key_lst[k] :
                     kk_rct.move_ip(-mv[0],-mv[1])
 
 
@@ -79,11 +79,8 @@ def main():
             vy *=  -1  #縦方向にはみ出ていたら
         screen.blit(bb_img,bb_rct)  #表示
         if kk_rct.colliderect(bb_rct):
-            ck_time=0
-            while ck_time < 5000:
-                kk_img = pg.image.load("ex02-20230425/fig/8.png")
-                screen.blit(kk_img,[800,400])
-                ck_time+=1
+            kk_img = pg.image.load("ex02-20230425/fig/8.png")
+            screen.blit(kk_img,[800,400])
             return
 
         pg.display.update()
