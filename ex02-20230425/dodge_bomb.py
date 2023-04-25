@@ -9,7 +9,6 @@ delta = {
         pg.K_LEFT:[-1,0],
         pg.K_RIGHT:[1,0] 
          }  #移動用辞書
-
 def check_bound(scr_rct: pg.rect,obj_rct: pg.rect) -> tuple[bool,bool]: 
     """
     オブジェクトが画面内か画面外であるかを判定しその真偽値タプルを返す
@@ -60,7 +59,7 @@ def main():
             if key_lst[k]:
                 kk_rct.move_ip(mv)
 
-        if check_bound(screen.get_rect(),kk_rct) != (True,True):
+        if check_bound(screen.get_rect(),kk_rct) != (True,True):  #画面端を越えようとしていないか確認する
             for k,mv in delta.items():
                 if key_lst[k] :
                     kk_rct.move_ip(-mv[0],-mv[1])
@@ -78,12 +77,12 @@ def main():
             vy *=  -1  #縦方向にはみ出ていたら
         screen.blit(bb_img,bb_rct)  #表示
 
-        if kk_rct.colliderect(bb_rct):
-            ck_time=0
-            while ck_time < 5000:
-                kk_img = pg.image.load("ex02-20230425/fig/8.png")
-                screen.blit(kk_img,[800,400])
-                ck_time+=1           
+        if kk_rct.colliderect(bb_rct):  #一定の時間の間止める
+            kk_img = pg.image.load("ex02-20230425/fig/8.png")
+            screen.blit(bg_img,[0,0])
+            screen.blit(kk_img,[800,400])
+            pg.display.update()
+            pg.time.wait(5000)  #一定の時間の間止める
             return
 
         pg.display.update()
