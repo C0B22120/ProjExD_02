@@ -31,11 +31,7 @@ def main():
     kk_img = pg.image.load("ex02-20230425/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect() #こうかとんのrect
-    kk_imgs=[]
-    for f in range (7):
-        kt_img =pg.transform.rotozoom(kk_img,45*f,1.0)
-        kk_imgs.append(kt_img)  #切り替えるこうかとんのリスト
-
+    lv_count=0
     kk_rct.center = 900, 400
     bb_img = pg.Surface((20,20))  #bombの描画
     pg.draw.circle(bb_img,(255,0,0),(10,10),10)
@@ -71,16 +67,24 @@ def main():
             vx *= -1
         if not tate:
             vy *=  -1  #縦方向にはみ出ていたら
+        if tmr % 600 == 0:  #一定時間経過で加速->レベルアップ
+            lv_count +=1
+            if lv_count <= 10 :  #加速する回数は10まで
+                vx *= 1.2
+                vy *= 1.2
+
         screen.blit(bb_img,bb_rct)  #爆弾の表示
         fonto  = pg.font.Font(None, 100)
-        txt = fonto.render(str(tmr), True, (0, 0,0))
-        screen.blit(txt, [0, 0])
+        tm_txt = fonto.render(str(tmr), True, (0, 0,0))  
+        lv_txt = fonto.render(str(lv_count),True,(0,0,0))
+        screen.blit(tm_txt, [0, 0])  #経過時間表示
+        screen.blit(lv_txt,[0,100])  #レベル表示
 
         if kk_rct.colliderect(bb_rct):  
             kk_img = pg.image.load("ex02-20230425/fig/8.png")
             screen.blit(bg_img,[0,0])
-            txt = fonto.render(str(tmr), True, (0, 0,0))
-            screen.blit(txt, [0, 0])
+            screen.blit(tm_txt, [0, 0])
+            screen.blit(lv_txt,[0,100])
             screen.blit(kk_img,[800,400])
 
             pg.display.update()
